@@ -1,9 +1,10 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import { mongo_link } from './mongo_link.js';
-import { registerValidation } from './validations/auth.js';
+import { registerValidation, loginValidation, postCreateValidation } from './validations/validations.js';
 import checkAuth from './utils/checkAuth.js';
-import { getMe, login, register } from './controllers/UserController.js';
+import * as UserController from './controllers/UserController.js';
+import * as PostController from './controllers/PostController.js';
 
 mongoose.connect(mongo_link)
   .then(() => console.log("DB connected"))
@@ -12,9 +13,15 @@ mongoose.connect(mongo_link)
 const app = express();
 app.use(express.json());
 
-app.post("/auth/login", login);
-app.post("/auth/register", registerValidation, register);
-app.get("/auth/me", checkAuth, getMe);
+app.post("/auth/login", loginValidation, UserController.login);
+app.post("/auth/register", registerValidation, UserController.register);
+app.get("/auth/me", checkAuth, UserController.getMe);
+
+app.post("/posts", checkAuth, postCreateValidation, PostController.create);
+app.get("/posts", PostController.getAll);
+app.get("/posts/:id", PostController.getOne);
+app.delete("/posts/:id", checkAuth, PostController.remove);
+app.patch("/posts/:id", checkAuth, postCreateValidation, PostController.update);
 
 app.listen(4444, (err) => {
   if (err) {
