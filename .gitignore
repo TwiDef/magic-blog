@@ -1,3 +1,5 @@
 node_modules
 mongo_link.js
 pass.txt
+
+client/node_modules
