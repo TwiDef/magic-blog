@@ -2,6 +2,8 @@ import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 
 const Header = () => {
+  const isAuth = false
+
   return (
     <AppBar position="fixed">
       <Toolbar sx={{
@@ -15,7 +17,7 @@ const Header = () => {
       }}>
         <Typography variant="h6" component="div">magic-blog-app</Typography>
         <Box sx={{ display: "flex", gap: 2 }}>
-          <Button sx={{ bgcolor: "#123c8f", color: "#fff" }} >Войти</Button>
+          <Button sx={{ bgcolor: "#123c8f", color: "#fff" }}>Войти</Button>
           <Button sx={{ bgcolor: "#7f0924", color: "#fff" }}>Создать аккаунт</Button>
         </Box>
       </Toolbar>
