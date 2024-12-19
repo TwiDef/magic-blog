@@ -1,9 +1,12 @@
 import React from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { Box, Link, Stack, Typography } from '@mui/material';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
-const Post = () => {
+const Post = ({ data }) => {
+  console.log(data)
+
   const img = "https://the-chinese-tea-company.com/cdn/shop/files/1999LaoCongMaoXie1_2000x.jpg?v=1698881277"
 
   return (
@@ -25,7 +28,17 @@ const Post = () => {
           </Stack>
         </Stack>
         <Stack sx={{ pl: 8, mt: 1 }}>
-          <Typography sx={{ fontSize: 30, fontWeight: "bold" }}>1999 Aged Hong Oolong Mao Xie</Typography>
+          <Link
+            to={`/posts/${1}`}
+            component={RouterLink}
+            sx={{
+              textDecoration: "none",
+              "&:hover": { textDecoration: "underline", textDecorationColor: "#001" }
+            }}>
+            <Typography sx={{ fontSize: 30, fontWeight: "bold", color: "#001" }}>
+              1999 Aged Hong Oolong Mao Xie
+            </Typography>
+          </Link>
           <Stack sx={{ color: "#6e6e6e", display: "flex", flexDirection: "row", gap: 1 }}>
             <Typography>#tea</Typography>
             <Typography>#puer</Typography>
@@ -41,8 +54,8 @@ const Post = () => {
             </Box>
           </Stack>
         </Stack>
-      </Box>
-    </Stack>
+      </Box >
+    </Stack >
   );
 };
 
