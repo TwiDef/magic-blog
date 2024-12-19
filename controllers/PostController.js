@@ -1,5 +1,20 @@
 import PostModel from '../models/Post.js';
 
+export const getLastTags = async (req, res) => {
+  try {
+    const posts = await PostModel.find().limit(5).exec();
+    const tags = posts.map((post) => post.tags)
+
+    res.json(Array.from(new Set(tags.flat())));
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "failed to get tags"
+    });
+  };
+}
+
 export const getAll = async (req, res) => {
   try {
     const posts = await PostModel.find().populate("user").exec();
@@ -56,7 +71,7 @@ export const create = async (req, res) => {
       title: req.body.title,
       text: req.body.text,
       imageUrl: req.body.imageUrl,
-      tags: req.body.tags,
+      tags: (req.body.tags).split(","),
       user: req.userId
     });
     const post = await doc.save();

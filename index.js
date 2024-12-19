@@ -39,6 +39,9 @@ app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
   });
 });
 
+/* tags */
+app.get("/tags", PostController.getLastTags);
+/* posts */
 app.get("/posts", PostController.getAll);
 app.get("/posts/:id", PostController.getOne);
 /* auth */
