@@ -9,6 +9,10 @@ export const postsApi = createApi({
       query: () => "/posts"
     }),
 
+    getPostById: builder.query({
+      query: (id) => `/posts/${id}`
+    }),
+
     getLastTags: builder.query({
       query: () => "/tags"
     })
@@ -16,4 +20,8 @@ export const postsApi = createApi({
   }),
 })
 
-export const { useGetAllPostsQuery, useGetLastTagsQuery } = postsApi
+export const {
+  useGetAllPostsQuery,
+  useGetPostByIdQuery,
+  useGetLastTagsQuery
+} = postsApi

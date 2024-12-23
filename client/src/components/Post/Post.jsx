@@ -5,7 +5,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
 const Post = ({ data }) => {
-  const { imageUrl, tags, title, user, viewsCount, createdAt } = data
+  const { _id, imageUrl, tags, title, user, viewsCount, createdAt } = data
 
   return (
     <Stack sx={{ bgcolor: "#ffffff", display: "flex", flexDirection: "column" }}>
@@ -27,7 +27,7 @@ const Post = ({ data }) => {
         </Stack>
         <Stack sx={{ pl: 8, mt: 1 }}>
           <Link
-            to={`/posts/${1}`}
+            to={`/posts/${_id}`}
             component={RouterLink}
             sx={{
               textDecoration: "none",

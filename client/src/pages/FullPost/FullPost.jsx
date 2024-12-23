@@ -1,10 +1,30 @@
 import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
+import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import { useGetPostByIdQuery } from '../../services/posts';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
+import Loader from '../../components/Loader';
+
 const FullPost = () => {
-  const img = "https://the-chinese-tea-company.com/cdn/shop/files/1999LaoCongMaoXie1_2000x.jpg?v=1698881277"
+  const { id } = useParams()
+  const { data, isLoading, isError } = useGetPostByIdQuery(id)
+  /*  { imageUrl, tags, text, title, updatedAt, user, viewsCount }*/
+
+  if (isLoading) {
+    return (
+      <Box sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        height: "60vh"
+      }}>
+        <Loader />
+      </Box>
+    )
+  }
 
   return (
     <>
@@ -12,7 +32,7 @@ const FullPost = () => {
         <Box
           sx={{
             width: "100%", height: "400px", overflow: "hidden",
-            background: `url(${img}) center center no-repeat`,
+            background: `url(${data && data.imageUrl}) center center no-repeat`,
             backgroundSize: "cover",
           }} />
         <Box sx={{ p: 2 }}>
@@ -22,23 +42,21 @@ const FullPost = () => {
               src="https://the-chinese-tea-company.com/cdn/shop/files/1999LaoCongMaoXie_400x.jpg?v=1698881277" alt="user-avatar" />
             <Stack>
               <Typography>Name</Typography>
-              <Box>12 june 2011</Box>
+              <Box>{data && (new Date(Date.parse(data.createdAt))).toLocaleDateString()}</Box>
             </Stack>
           </Stack>
           <Stack sx={{ pl: 8, mt: 1 }}>
-            <Typography sx={{ fontSize: 30, fontWeight: "bold" }}>1999 Aged Hong Oolong Mao Xie</Typography>
-            <Stack sx={{ color: "#6e6e6e", display: "flex", flexDirection: "row", gap: 1 }}>
-              <Typography>#tea</Typography>
-              <Typography>#puer</Typography>
-            </Stack>
-            <Typography sx={{ mt: 2, mb: 2 }}>
-              1999 Aged Hong Oolong Mao Xie is a rare finding and one-off batch of aged oolong tea.  This tea was made into almost like a black tea with the highest oxidised of all oolong teas, though following oolong processing techniques. It's also known as Hong Oolong. The tea was produced in a very traditional methods, fully hand-processed and wood-charcoal baked at very low heat for several days. It has been naturally stored since 1999.
-              Mao Xie (毛蟹茶), translated as "Hairy Crab", is one of famous cultivar for making oolong teas in Anxi County of the Chinese province Fujian. The name is due to the fine downy hair that can be found on the young leaves, the deep serrations and neat edge of the leaves, like the shell of a Chinese mitten crab.
+            <Typography sx={{ fontSize: 30, fontWeight: "bold" }}>
+              {data && data.title}
             </Typography>
+            <Stack sx={{ color: "#6e6e6e", display: "flex", flexDirection: "row", gap: 1 }}>
+              {data && data.tags.map((tag, i) => <Typography key={i}>#{tag}</Typography>)}
+            </Stack>
+            <Typography sx={{ mt: 2, mb: 2 }}>{data && data.text}</Typography>
             <Stack sx={{ color: "#6e6e6e", display: "flex", flexDirection: "row", gap: 3 }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                 <RemoveRedEyeIcon sx={{ fontSize: 20 }} />
-                <Typography>150</Typography>
+                <Typography>{data && data.viewsCount}</Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                 <ChatBubbleIcon sx={{ fontSize: 20 }} />
