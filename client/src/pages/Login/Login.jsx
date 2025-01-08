@@ -1,12 +1,15 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useGetUserDataMutation } from '../../services/auth';
 import { Box, Paper, TextField, Typography, Button, FormControl } from '@mui/material';
 import { useForm } from "react-hook-form";
-import { useDispatch } from 'react-redux';
-import { setAuthData } from '../../redux/slices/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsAuth, setAuthData } from '../../redux/slices/auth';
 
 const Login = () => {
+  const history = useHistory()
   const dispatch = useDispatch()
+  const isAuth = useSelector(selectIsAuth)
   const [getUserData, { data, error, isLoading }] = useGetUserDataMutation()
   const getUserDataHandler = (data) => getUserData(data)
 
@@ -15,7 +18,7 @@ const Login = () => {
       email: "",
       password: ""
     },
-    mode: "onChange"
+    mode: "onSubmit"
   })
 
   const onSubmit = (values) => {
@@ -23,10 +26,12 @@ const Login = () => {
   }
 
   React.useEffect(() => {
-    dispatch(setAuthData(data))
+    data && dispatch(setAuthData(data))
   }, [data])
 
-  console.log(data)
+  React.useEffect(() => {
+    isAuth && history.push("/")
+  }, [isAuth])
 
   return (
     <Box sx={{ mt: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>

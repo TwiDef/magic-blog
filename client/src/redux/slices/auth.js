@@ -10,10 +10,14 @@ export const authSlice = createSlice({
   reducers: {
     setAuthData: (state, action) => {
       state.data = action.payload ? action.payload : null
+    },
+    logout: (state) => {
+      state.data = null
     }
   }
 })
 
-export const { setAuthData } = authSlice.actions
+export const { setAuthData, logout } = authSlice.actions
+export const selectIsAuth = (state) => Boolean(state.auth.data)
 
 export default authSlice.reducer

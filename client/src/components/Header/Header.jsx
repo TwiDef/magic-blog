@@ -1,9 +1,18 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { AppBar, Box, Button, Link, Toolbar, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout, selectIsAuth } from '../../redux/slices/auth';
 
 const Header = () => {
-  const [isAuth, setIsAuth] = React.useState(false)
+  const dispatch = useDispatch()
+  const isAuth = useSelector(selectIsAuth)
+
+  const onClickLogout = () => {
+    if (window.confirm("Вы действительно хотите выйти?")) {
+      dispatch(logout())
+    }
+  }
 
   return (
     <AppBar position="fixed">
@@ -25,7 +34,9 @@ const Header = () => {
             <Link component={RouterLink} to="/posts/create">
               <Button sx={{ bgcolor: "#123c8f", color: "#fff" }}>Написать статью</Button>
             </Link>
-            <Button sx={{ bgcolor: "#7f0924", color: "#fff" }}>Выйти</Button>
+            <Button
+              onClick={onClickLogout}
+              sx={{ bgcolor: "#7f0924", color: "#fff" }}>Выйти</Button>
           </Box> :
 
           <Box sx={{ display: "flex", gap: 2 }}>
