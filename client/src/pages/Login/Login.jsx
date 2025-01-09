@@ -21,13 +21,20 @@ const Login = () => {
     mode: "onSubmit"
   })
 
-  const onSubmit = (values) => {
-    getUserDataHandler(values)
-  }
+  const onSubmit = async (values) => {
+    const userData = await getUserDataHandler(values)
 
-  React.useEffect(() => {
-    data && dispatch(setAuthData(data))
-  }, [data])
+    if (!userData.error) {
+      dispatch(setAuthData(userData.data))
+
+      if (userData.data.token) {
+        window.localStorage.setItem("token", userData.data.token)
+      }
+
+    } else {
+      alert("Не удалось авторизоваться!")
+    }
+  }
 
   React.useEffect(() => {
     isAuth && history.push("/")
