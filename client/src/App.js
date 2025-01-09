@@ -1,14 +1,26 @@
+import React from 'react';
 import { Box, Container } from '@mui/material';
 import { Switch, Route } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsAuth, setAuthData } from './redux/slices/auth';
+import { useGetAuthMeQuery } from './services/auth';
 
 import Header from './components/Header';
 import Home from './pages/Home';
 import FullPost from './pages/FullPost';
 import AddPost from './pages/AddPost';
-import Login from './pages/Login/Login';
-import Registration from './pages/Registration/Registration';
+import Login from './pages/Login';
+import Registration from './pages/Registration';
 
 function App() {
+  const dispatch = useDispatch()
+  const isAuth = useSelector(selectIsAuth)
+  const { data } = useGetAuthMeQuery()
+
+  React.useEffect(() => {
+    data && dispatch(setAuthData(data))
+  }, [data])
+
 
   return (
     <Box sx={{ bgcolor: '#cfe8fc' }}>

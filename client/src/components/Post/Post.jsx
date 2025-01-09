@@ -8,7 +8,14 @@ const Post = ({ data }) => {
   const { _id, imageUrl, tags, title, user, viewsCount, createdAt } = data
 
   return (
-    <Stack sx={{ bgcolor: "#ffffff", display: "flex", flexDirection: "column" }}>
+    <Stack
+      sx={{
+        bgcolor: "#ffffff",
+        display: "flex",
+        flexDirection: "column",
+        transition: "all .1s ease-in-out",
+        "&:hover": { scale: 1.01 }
+      }}>
       <Box
         sx={{
           width: "100%", height: "400px", overflow: "hidden",

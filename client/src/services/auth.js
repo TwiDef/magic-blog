@@ -1,5 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+export const getTokenFromLocalStorage = () => {
+  return localStorage.getItem("token")
+}
+
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:4444/auth' }),
@@ -11,11 +15,21 @@ export const authApi = createApi({
         method: "POST",
         body: params
       }),
-    })
+    }),
 
+    getAuthMe: builder.query({
+      query: () => ({
+        url: "/me",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getTokenFromLocalStorage()}`
+        }
+      })
+    })
   })
 })
 
 export const {
-  useGetUserDataMutation
+  useGetUserDataMutation,
+  useGetAuthMeQuery
 } = authApi
