@@ -17,6 +17,14 @@ export const authApi = createApi({
       }),
     }),
 
+    fetchRegisterUser: builder.mutation({
+      query: (params) => ({
+        url: "/register",
+        method: "POST",
+        body: params
+      })
+    }),
+
     getAuthMe: builder.query({
       query: () => ({
         url: "/me",
@@ -31,5 +39,6 @@ export const authApi = createApi({
 
 export const {
   useGetUserDataMutation,
+  useFetchRegisterUserMutation,
   useGetAuthMeQuery
 } = authApi
