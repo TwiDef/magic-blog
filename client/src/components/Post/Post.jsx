@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Link, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Link, Stack, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
-const Post = ({ data }) => {
+const Post = ({ data, isEditable }) => {
   const { _id, imageUrl, tags, title, user, viewsCount, createdAt } = data
 
   return (
@@ -23,15 +25,27 @@ const Post = ({ data }) => {
           backgroundSize: "cover",
         }} />
       <Box sx={{ p: 2 }}>
-        <Stack sx={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 2 }}>
-          <img
-            style={{ width: "50px", height: "50px", objectFit: "none", borderRadius: "50%" }}
-            src={user.avatarUrl} alt="user-avatar" />
-          <Stack>
-            <Typography>{user.fullName}</Typography>
-            <Box>{(new Date(Date.parse(createdAt))).toLocaleDateString()}</Box>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Stack sx={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 2 }}>
+            <img
+              style={{ width: "50px", height: "50px", objectFit: "none", borderRadius: "50%" }}
+              src={user.avatarUrl} alt="user-avatar" />
+            <Stack>
+              <Typography>{user.fullName}</Typography>
+              <Box>{(new Date(Date.parse(createdAt))).toLocaleDateString()}</Box>
+            </Stack>
           </Stack>
-        </Stack>
+
+          <Stack sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+            <IconButton disabled={!isEditable} aria-label="delete">
+              <CloseIcon fontSize="medium" sx={{ color: "#eb2831" }} />
+            </IconButton>
+            <IconButton disabled={!isEditable} aria-label="edit">
+              <EditIcon fontSize="small" sx={{ color: "#0d42f9" }} />
+            </IconButton>
+          </Stack>
+        </Box>
+
         <Stack sx={{ pl: 8, mt: 1 }}>
           <Link
             to={`/posts/${_id}`}

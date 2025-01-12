@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { useGetAllPostsQuery } from '../../services/posts';
 
@@ -8,6 +9,7 @@ import Comments from '../../components/Comments';
 import Loader from '../../components/Loader';
 
 const Home = () => {
+  const userData = useSelector(state => state.auth.data)
   const { data, isLoading, isError } = useGetAllPostsQuery()
 
   const [activeTab, setActiveTab] = React.useState(1)
@@ -34,7 +36,9 @@ const Home = () => {
               }}>
                 <Loader />
               </Box> :
-              data && data.map((post) => <Post key={post._id} data={post} />)
+              data && data.map((post) => {
+                return <Post key={post._id} data={post} isEditable={userData?._id === post.user._id} />
+              })
           }
         </Box>
         <Box sx={{ width: "30%", height: "100%", display: "flex", flexDirection: "column", gap: 2 }}>
