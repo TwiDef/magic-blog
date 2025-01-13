@@ -37,10 +37,14 @@ const Post = ({ data, isEditable }) => {
           </Stack>
 
           <Stack sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-            <IconButton disabled={!isEditable} aria-label="delete">
+            <IconButton
+              disabled={!isEditable}
+              aria-label="delete">
               <CloseIcon fontSize="medium" sx={{ color: "#eb2831" }} />
             </IconButton>
-            <IconButton disabled={!isEditable} aria-label="edit">
+            <IconButton
+              disabled={!isEditable}
+              aria-label="edit">
               <EditIcon fontSize="small" sx={{ color: "#0d42f9" }} />
             </IconButton>
           </Stack>

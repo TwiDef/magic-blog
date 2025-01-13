@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useGetUserDataMutation } from '../../services/auth';
-import { Box, Paper, TextField, Typography, Button, FormControl } from '@mui/material';
+import { Box, Paper, TextField, Typography, Button } from '@mui/material';
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuth, setAuthData } from '../../redux/slices/auth';

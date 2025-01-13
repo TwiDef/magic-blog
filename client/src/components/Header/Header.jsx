@@ -32,7 +32,7 @@ const Header = () => {
         {isAuth ?
 
           <Box sx={{ display: "flex", gap: 2 }}>
-            <Link component={RouterLink} to="/posts/create">
+            <Link component={RouterLink} to="/add-post">
               <Button sx={{ bgcolor: "#123c8f", color: "#fff" }}>Написать статью</Button>
             </Link>
             <Button
