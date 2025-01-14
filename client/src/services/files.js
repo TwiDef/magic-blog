@@ -1,8 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-export const getTokenFromLocalStorage = () => {
-  return localStorage.getItem("token")
-}
+import { getTokenFromLocalStorage } from './auth'
 
 export const filesApi = createApi({
   reducerPath: 'filesApi',

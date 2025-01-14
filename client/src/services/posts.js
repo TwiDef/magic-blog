@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { getTokenFromLocalStorage } from './auth'
 
 export const postsApi = createApi({
   reducerPath: 'postsApi',
@@ -15,6 +16,17 @@ export const postsApi = createApi({
 
     getLastTags: builder.query({
       query: () => "/tags"
+    }),
+
+    createPost: builder.mutation({
+      query: (data) => ({
+        url: "/posts",
+        method: "POST",
+        body: data,
+        headers: {
+          Authorization: `Bearer ${getTokenFromLocalStorage()}`
+        }
+      })
     })
 
   }),
@@ -23,5 +35,6 @@ export const postsApi = createApi({
 export const {
   useGetAllPostsQuery,
   useGetPostByIdQuery,
-  useGetLastTagsQuery
+  useGetLastTagsQuery,
+  useCreatePostMutation
 } = postsApi

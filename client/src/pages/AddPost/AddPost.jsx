@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectIsAuth } from '../../redux/slices/auth';
 import { useUploadFileMutation } from '../../services/files';
+import { useCreatePostMutation } from '../../services/posts';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
@@ -15,13 +16,17 @@ import styles from './AddPost.module.css';
 export const AddPost = () => {
   const history = useHistory()
   const isAuth = useSelector(selectIsAuth)
+  const _id = useSelector(state => state.auth.data)
   const [imageUrl, setImageUrl] = React.useState('')
-  const [value, setValue] = React.useState('')
+  const [text, setText] = React.useState('')
   const [title, setTitle] = React.useState('')
   const [tags, setTags] = React.useState('')
   const inputFileRef = React.useRef(null)
 
-  const [uploadFile, { data, error, isLoading }] = useUploadFileMutation()
+  const [createPost, { data, error, isLoading }] = useCreatePostMutation()
+  const createPostHandler = (data) => createPost(data)
+
+  const [uploadFile, _] = useUploadFileMutation()
   const uploadFileHandler = (data) => uploadFile(data)
 
   const handleChangeFile = async (e) => {
@@ -42,8 +47,29 @@ export const AddPost = () => {
   }
 
   const onChange = React.useCallback((value) => {
-    setValue(value);
+    setText(value);
   }, []);
+
+  const onSubmit = async () => {
+    try {
+      const postData = await createPostHandler({
+        title,
+        text,
+        imageUrl: `http://localhost:4444${imageUrl}`,
+        tags,
+        user: _id
+      })
+      history.push(`/posts/${postData.data._id}`)
+
+      if (postData.error) {
+        alert(`${postData.error.data[0].msg}`)
+      }
+
+    } catch (error) {
+      alert("Не удалось создать пост")
+      console.log(error)
+    }
+  }
 
   const options = React.useMemo(
     () => ({
@@ -103,11 +129,13 @@ export const AddPost = () => {
         fullWidth />
       <SimpleMDE
         className={styles.editor}
-        value={value}
+        value={text}
         onChange={onChange}
         options={options} />
       <div className={styles.buttons}>
-        <Button sx={{ bgcolor: "#123c8f", color: "#fff" }} size="large" variant="contained">
+        <Button
+          onClick={onSubmit}
+          sx={{ bgcolor: "#123c8f", color: "#fff" }} size="large" variant="contained">
           Опубликовать
         </Button>
         <a href="/">
