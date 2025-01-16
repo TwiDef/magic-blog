@@ -27,9 +27,18 @@ const Post = ({ data, isEditable }) => {
       <Box sx={{ p: 2 }}>
         <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Stack sx={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 2 }}>
-            <img
-              style={{ width: "50px", height: "50px", objectFit: "none", borderRadius: "50%" }}
-              src={user.avatarUrl} alt="user-avatar" />
+            <Box
+              style={{
+                width: "50px",
+                height: "50px",
+                overflow: "hidden",
+                background: `url(${data && data.user.avatarUrl ?
+                  data.user.avatarUrl :
+                  "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"}) center center no-repeat`,
+                backgroundSize: "cover",
+                borderRadius: "50%"
+              }}
+              alt="user-avatar" />
             <Stack>
               <Typography>{user.fullName}</Typography>
               <Box>{(new Date(Date.parse(createdAt))).toLocaleDateString()}</Box>
@@ -63,7 +72,7 @@ const Post = ({ data, isEditable }) => {
             </Typography>
           </Link>
           <Stack sx={{ color: "#6e6e6e", display: "flex", flexDirection: "row", gap: 1 }}>
-            {tags.map((tag, i) => <Typography key={i}>#{tag}</Typography>)}
+            {tags.toString().split(" ").map((tag, i) => <Typography key={i}>#{tag}</Typography>)}
           </Stack>
           <Stack sx={{ mt: 2, color: "#6e6e6e", display: "flex", flexDirection: "row", gap: 3 }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>

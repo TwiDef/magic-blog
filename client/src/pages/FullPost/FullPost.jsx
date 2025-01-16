@@ -1,16 +1,23 @@
 import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import { useParams, useHistory } from 'react-router-dom';
 import { useGetPostByIdQuery } from '../../services/posts';
+import { useSelector } from 'react-redux';
+import { selectIsAuth } from '../../redux/slices/auth';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
 import Loader from '../../components/Loader';
 
 const FullPost = () => {
+  const history = useHistory()
+  const isAuth = useSelector(selectIsAuth)
   const { id } = useParams()
   const { data, isLoading, isError } = useGetPostByIdQuery(id)
-  /*  { imageUrl, tags, text, title, updatedAt, user, viewsCount }*/
+
+  React.useEffect(() => {
+    !isAuth && history.push("/")
+  }, [isAuth])
 
   if (isLoading) {
     return (
@@ -37,11 +44,20 @@ const FullPost = () => {
           }} />
         <Box sx={{ p: 2 }}>
           <Stack sx={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 2 }}>
-            <img
-              style={{ width: "50px", height: "50px", objectFit: "none", borderRadius: "50%" }}
-              src="https://the-chinese-tea-company.com/cdn/shop/files/1999LaoCongMaoXie_400x.jpg?v=1698881277" alt="user-avatar" />
+            <Box
+              style={{
+                width: "50px",
+                height: "50px",
+                overflow: "hidden",
+                background: `url(${data && data.user.avatarUrl ?
+                  data.user.avatarUrl :
+                  "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"}) center center no-repeat`,
+                backgroundSize: "cover",
+                borderRadius: "50%"
+              }}
+              alt="user-avatar" />
             <Stack>
-              <Typography>Name</Typography>
+              <Typography>{data && data.user?.fullName}</Typography>
               <Box>{data && (new Date(Date.parse(data.createdAt))).toLocaleDateString()}</Box>
             </Stack>
           </Stack>
@@ -50,7 +66,7 @@ const FullPost = () => {
               {data && data.title}
             </Typography>
             <Stack sx={{ color: "#6e6e6e", display: "flex", flexDirection: "row", gap: 1 }}>
-              {data && data.tags.map((tag, i) => <Typography key={i}>#{tag}</Typography>)}
+              {data && data.tags.toString().split(" ").map((tag, i) => <Typography key={i}>#{tag}</Typography>)}
             </Stack>
             <Typography sx={{ mt: 2, mb: 2 }}>{data && data.text}</Typography>
             <Stack sx={{ color: "#6e6e6e", display: "flex", flexDirection: "row", gap: 3 }}>

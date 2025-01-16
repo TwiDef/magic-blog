@@ -33,12 +33,13 @@ export const getOne = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    PostModel.findByIdAndUpdate(
+    const post = await PostModel.findByIdAndUpdate(
       { _id: postId },
       { $inc: { viewsCount: 1 } },
       { returnDocument: "after" })
-      .then(doc => res.json(doc))
-      .catch(error => res.status(500).json({ message: "can't find post" }))
+      .populate("user").exec();
+
+    res.json(post);
 
   } catch (error) {
     console.log(error);
