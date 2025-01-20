@@ -27,6 +27,16 @@ export const postsApi = createApi({
           Authorization: `Bearer ${getTokenFromLocalStorage()}`
         }
       })
+    }),
+
+    deletePost: builder.mutation({
+      query: ({ id }) => ({
+        url: `/posts/${id}`,
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${getTokenFromLocalStorage()}`
+        }
+      })
     })
 
   }),
@@ -36,5 +46,6 @@ export const {
   useGetAllPostsQuery,
   useGetPostByIdQuery,
   useGetLastTagsQuery,
-  useCreatePostMutation
+  useCreatePostMutation,
+  useDeletePostMutation
 } = postsApi

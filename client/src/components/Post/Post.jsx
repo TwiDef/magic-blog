@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, IconButton, Link, Stack, Typography } from '@mui/material';
+import { useDeletePostMutation } from '../../services/posts';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -8,6 +9,27 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
 const Post = ({ data, isEditable }) => {
   const { _id, imageUrl, tags, title, user, viewsCount, createdAt } = data
+  const [deletePost, { _ }] = useDeletePostMutation()
+  const deletePostHandler = (id) => deletePost(id)
+
+  const onDeletePost = async () => {
+    try {
+      const status = await deletePostHandler({
+        id: _id
+      })
+      if (status.data.success) {
+        alert("Пост успешно удален")
+      }
+
+      if (!status.data.success) {
+        alert(`${status.data.success}`)
+      }
+
+    } catch (error) {
+      alert("Не удалось удалить пост")
+      console.log(error)
+    }
+  }
 
   return (
     <Stack
@@ -47,6 +69,7 @@ const Post = ({ data, isEditable }) => {
 
           <Stack sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
             <IconButton
+              onClick={onDeletePost}
               disabled={!isEditable}
               aria-label="delete">
               <CloseIcon fontSize="medium" sx={{ color: "#eb2831" }} />
