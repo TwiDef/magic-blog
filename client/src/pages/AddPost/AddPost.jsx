@@ -1,10 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectIsAuth } from '../../redux/slices/auth';
 import { useUploadFileMutation } from '../../services/files';
 import { useCreatePostMutation } from '../../services/posts';
-import { addPost } from '../../redux/slices/posts';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
@@ -15,15 +14,15 @@ import 'easymde/dist/easymde.min.css';
 import styles from './AddPost.module.css';
 
 export const AddPost = () => {
-  const dispatch = useDispatch()
   const history = useHistory()
   const isAuth = useSelector(selectIsAuth)
   const _id = useSelector(state => state.auth.data)
+
+  const inputFileRef = React.useRef(null)
   const [imageUrl, setImageUrl] = React.useState('')
   const [text, setText] = React.useState('')
   const [title, setTitle] = React.useState('')
   const [tags, setTags] = React.useState('')
-  const inputFileRef = React.useRef(null)
 
   const [createPost, { data, error, isLoading }] = useCreatePostMutation()
   const createPostHandler = (data) => createPost(data)
@@ -61,11 +60,6 @@ export const AddPost = () => {
         tags,
         user: _id
       })
-
-      if (postData.data) {
-        dispatch(addPost(postData.data))
-      }
-
       history.push(`/posts/${postData.data._id}`)
 
       if (postData.error) {

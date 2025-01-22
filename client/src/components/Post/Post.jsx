@@ -1,17 +1,15 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, IconButton, Link, Stack, Typography } from '@mui/material';
-import { useDeletePostMutation } from '../../services/posts';
-import { useDispatch } from 'react-redux';
-import { removePost } from '../../redux/slices/posts';
+import { useDeletePostMutation, useGetAllPostsQuery } from '../../services/posts';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
 const Post = ({ data, isEditable }) => {
-  const dispatch = useDispatch()
   const { _id, imageUrl, tags, title, user, viewsCount, createdAt } = data
+  const { refetch } = useGetAllPostsQuery()
   const [deletePost, { _ }] = useDeletePostMutation()
   const deletePostHandler = (id) => deletePost(id)
 
@@ -20,7 +18,8 @@ const Post = ({ data, isEditable }) => {
       const status = await deletePostHandler({
         id: _id
       })
-      dispatch(removePost(_id))
+      refetch()
+
       if (status.data.success) {
         alert("Пост успешно удален")
       }
