@@ -1,7 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { useGetAllPostsQuery } from '../../services/posts';
+import { setPosts } from '../../redux/slices/posts';
 
 import Post from '../../components/Post';
 import Tags from '../../components/Tags';
@@ -9,13 +10,23 @@ import Comments from '../../components/Comments';
 import Loader from '../../components/Loader';
 
 const Home = () => {
+  const dispatch = useDispatch()
   const userData = useSelector(state => state.auth.data)
-  const { data, isLoading, isError } = useGetAllPostsQuery()
-
+  const { posts } = useSelector(state => state.posts)
+  const { data, isLoading, isError, refetch } = useGetAllPostsQuery()
   const [activeTab, setActiveTab] = React.useState(1)
+
   const handleChange = (event, newValue) => {
     setActiveTab(newValue)
   };
+
+  React.useEffect(() => {
+    dispatch(setPosts(data))
+  }, [data, dispatch])
+
+  React.useEffect(() => {
+    refetch()
+  }, [posts, refetch])
 
   return (
     <>
@@ -36,7 +47,7 @@ const Home = () => {
               }}>
                 <Loader />
               </Box> :
-              data && data.map((post) => {
+              posts && posts.map((post) => {
                 return <Post key={post._id} data={post} isEditable={userData?._id === post.user._id} />
               })
           }
