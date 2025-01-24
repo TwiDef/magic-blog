@@ -1,13 +1,17 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, IconButton, Link, Stack, Typography } from '@mui/material';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setEditPostId } from '../../redux/slices/posts';
 import { useDeletePostMutation, useGetAllPostsQuery } from '../../services/posts';
+import { Box, IconButton, Link, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
 const Post = ({ data, isEditable }) => {
+  const dispatch = useDispatch()
+  const history = useHistory()
   const { _id, imageUrl, tags, title, user, viewsCount, createdAt } = data
   const { refetch } = useGetAllPostsQuery()
   const [deletePost, { _ }] = useDeletePostMutation()
@@ -78,6 +82,10 @@ const Post = ({ data, isEditable }) => {
               <CloseIcon fontSize="medium" sx={{ color: "#eb2831" }} />
             </IconButton>
             <IconButton
+              onClick={() => {
+                dispatch(setEditPostId(_id))
+                history.push(`/add-post/${_id}/edit`)
+              }}
               disabled={!isEditable}
               aria-label="edit">
               <EditIcon fontSize="small" sx={{ color: "#0d42f9" }} />

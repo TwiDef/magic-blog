@@ -30,6 +30,7 @@ function App() {
           <Route path="/login"><Login /></Route>
           <Route path="/registration"><Registration /></Route>
           <Route path="/add-post"><AddPost /></Route>
+          <Route path="/add-post/:id/edit"><AddPost /></Route>
           <Route path="/posts/:id"><FullPost /></Route>
           <Route path="/"><Home /></Route>
         </Switch>

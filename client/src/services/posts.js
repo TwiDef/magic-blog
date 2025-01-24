@@ -37,8 +37,17 @@ export const postsApi = createApi({
           Authorization: `Bearer ${getTokenFromLocalStorage()}`
         }
       })
-    })
+    }),
 
+    patchPost: builder.mutation({
+      query: ({ id }) => ({
+        url: `/posts/${id}`,
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${getTokenFromLocalStorage()}`
+        }
+      })
+    })
   }),
 })
 
@@ -47,5 +56,6 @@ export const {
   useGetPostByIdQuery,
   useGetLastTagsQuery,
   useCreatePostMutation,
-  useDeletePostMutation
+  useDeletePostMutation,
+  usePatchPostMutation
 } = postsApi
